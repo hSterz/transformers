@@ -191,7 +191,7 @@ class GPT2Config(PretrainedConfig):
 class GPT2OnnxConfig(OnnxConfigWithPast):
     @property
     def inputs(self) -> Mapping[str, Mapping[int, str]]:
-        common_inputs = OrderedDict({"input_ids": {0: "batch"}})
+        common_inputs = OrderedDict({"input_ids": {0: "batch", 1: "sequence"}})
         if self.use_past:
             for i in range(self._config.n_layer * 2):
                 common_inputs[f"past_key_values.{i}"] = {0: "batch", 2: "sequence"}
@@ -204,6 +204,8 @@ class GPT2OnnxConfig(OnnxConfigWithPast):
 
     @property
     def outputs(self) -> Mapping[str, Mapping[int, str]]:
+        if self.task == "causal-lm":
+            return OrderedDict([("logits", {0: "batch", 1: "sequence"})])
         common_outputs = OrderedDict({"last_hidden_state": {0: "batch", 1: "sequence"}})
         if self.use_past:
             for i in range(self._config.n_layer * 2):

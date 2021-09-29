@@ -172,4 +172,11 @@ class BertOnnxConfig(OnnxConfig):
 
     @property
     def outputs(self) -> Mapping[str, Mapping[int, str]]:
-        return OrderedDict([("last_hidden_state", {0: "batch", 1: "sequence"}), ("pooler_output", {0: "batch"})])
+        if self.task == "sequence-classification":
+            return OrderedDict([("logits", {0: "batch"})])
+        elif self.task == "token-classification":
+            return OrderedDict([("logits", {0: "batch", 1: "sequence"})])
+        elif self.task == "question-answering":
+            return OrderedDict([("start_logits", {0: "batch", 1: "sequence"}), ("end_logits", {0: "batch", 1: "sequence"})])
+        else:
+            return OrderedDict([("last_hidden_state", {0: "batch", 1: "sequence"}), ("pooler_output", {0: "batch"})])
