@@ -59,11 +59,24 @@ class FeaturesManager:
     # Set of model topologies we support associated to the features supported by each topology and the factory
     _SUPPORTED_MODEL_KIND = {
         "albert": supported_features_mapping("default", onnx_config_cls=AlbertOnnxConfig),
-        "bart": supported_features_mapping("default", onnx_config_cls=BartOnnxConfig),
+        "bart": supported_features_mapping(
+            "default",
+            "sequence-classification",
+            onnx_config_cls=BartOnnxConfig
+        ),
         "mbart": supported_features_mapping("default", onnx_config_cls=MBartOnnxConfig),
-        "bert": supported_features_mapping("default", onnx_config_cls=BertOnnxConfig),
+        "bert": supported_features_mapping(
+            "default",
+            "sequence-classification",
+            "token-classification",
+            "question-answering",
+            onnx_config_cls=BertOnnxConfig
+        ),
         "distilbert": supported_features_mapping("default", onnx_config_cls=DistilBertOnnxConfig),
-        "gpt2": supported_features_mapping("default", onnx_config_cls=GPT2OnnxConfig),
+        "gpt2": supported_features_mapping(
+            "default",
+            "causal-lm",
+            onnx_config_cls=GPT2OnnxConfig),
         "longformer": supported_features_mapping("default", onnx_config_cls=LongformerOnnxConfig),
         "roberta": supported_features_mapping("default", onnx_config_cls=RobertaOnnxConfig),
         "t5": supported_features_mapping(
